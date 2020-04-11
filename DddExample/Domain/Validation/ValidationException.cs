@@ -24,12 +24,12 @@ namespace DddExample.Domain.Validation
 
             foreach(var (key, value) in errors)
             {
-                var errorCount = key.Length.ToString();
+                var errorCount = value.Count.ToString();
                 builder.AppendLine($"Errors for '{key}': {errorCount}");
                 
                 foreach(var error in value)
                 {
-                    builder.AppendLine(error.Message);
+                    builder.AppendLine($"-{error.Message}");
                 }
             }
 

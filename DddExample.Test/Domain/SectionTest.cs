@@ -1,19 +1,21 @@
 ﻿using DddExample.Domain.Models;
-using DddExample.Test.Utility;
+using DddExample.Domain.Validation;
+using DddExample.Domain.Validation.Errors;
 using NUnit.Framework;
 
 namespace DddExample.Test.Domain
 {
+    [Ignore("not ready")]
     public class SectionTest
     {
         [TestCase("")]
         [TestCase(" ")]
-        public void Ctor_NameTooShort_ValidationError(string name)
+        [TestCase(" ")]
+        public void Ctor_NameInvalidLength_LengthError(string name)
         {
-            ValidationResultAssert.FirstError(
-                nameof(Section.Name),
-                "Too short.",
-                () => new Section(name));
+            var exception = Assert.Throws<ValidationException>(() => new Section(name));
+
+            Assert.IsInstanceOf<LengthValidationError>(exception.Errors[nameof(Section.Name)][0]);
         }
     }
 }

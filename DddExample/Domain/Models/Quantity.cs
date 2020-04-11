@@ -5,26 +5,32 @@ namespace DddExample.Domain.Models
 {
     public class Quantity
     {
+        private const decimal AmountMin = 0.1m;
+        private const decimal AmountMax = 10m;
+        private const int MeasurementMin = 1;
+        private const int MeasurementMax = 10;
+
         public decimal Amount { get; }
         public string Measurement { get; }
 
         public Quantity(decimal amount, string measurement)
         {
             ValidationResults? validation = null;
-            if(amount <= 0)
+            if(amount < AmountMin || amount > AmountMax)
             {
                 ValidationResults.AddError(
                     ref validation,
                     nameof(Amount),
-                    new RangeValidationError<decimal>(0, decimal.MaxValue));
+                    new RangeValidationError<decimal>(AmountMin, AmountMax));
             }
 
-            if(string.IsNullOrWhiteSpace(measurement))
+            measurement = measurement.Trim();
+            if(measurement.Length < MeasurementMin || measurement.Length > MeasurementMax)
             {
                 ValidationResults.AddError(
                     ref validation,
                     nameof(Measurement),
-                    new EmptyValidationError());
+                    new LengthValidationError(MeasurementMin, MeasurementMax));
             }
 
             validation?.ThrowIfFailed();

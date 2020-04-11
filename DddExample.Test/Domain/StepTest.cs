@@ -1,5 +1,4 @@
 ﻿using DddExample.Domain.Models;
-using DddExample.Test.Utility;
 using NUnit.Framework;
 
 namespace DddExample.Test.Domain
@@ -15,18 +14,18 @@ namespace DddExample.Test.Domain
         [Test]
         public void Ctor_HasIngredients_ReturnStep()
         {
-            var ingredients = new[] {new Ingredient("A", new Quantity(1, "C"))};
+            var ingredients = new[] {new Ingredient("Ab", new Quantity(1, "C"))};
             Assert.DoesNotThrow(() => new Step("test", ingredients));
         }
 
-        [TestCase("")]
-        [TestCase(" ")]
-        public void Ctor_EmptyInstruction_ValidationError(string instruction)
-        {
-            ValidationResultAssert.FirstError(
-                nameof(Step.Instruction),
-                "Can't be empty.",
-                () => new Step(instruction, null));
-        }
+        //[TestCase("")]
+        //[TestCase(" ")]
+        //public void Ctor_EmptyInstruction_ValidationError(string instruction)
+        //{
+        //    ValidationResultAssert.FirstError(
+        //        nameof(Step.Instruction),
+        //        "Can't be empty.",
+        //        () => new Step(instruction, null));
+        //}
     }
 }

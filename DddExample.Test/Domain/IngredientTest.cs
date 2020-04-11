@@ -1,5 +1,6 @@
 ﻿using DddExample.Domain.Models;
-using DddExample.Test.Utility;
+using DddExample.Domain.Validation;
+using DddExample.Domain.Validation.Errors;
 using NUnit.Framework;
 
 namespace DddExample.Test.Domain
@@ -12,10 +13,9 @@ namespace DddExample.Test.Domain
         [TestCase(" ")]
         public void Ctor_EmptyName_ValidationError(string name)
         {
-            ValidationResultAssert.FirstError(
-                nameof(Ingredient.Name),
-                "Can't be empty.",
-                () => new Ingredient(name, quantity));
+            var exception = Assert.Throws<ValidationException>(() => new Ingredient(name, quantity));
+
+            Assert.IsInstanceOf<LengthValidationError>(exception.Errors[nameof(Ingredient.Name)][0]);
         }
     }
 }
