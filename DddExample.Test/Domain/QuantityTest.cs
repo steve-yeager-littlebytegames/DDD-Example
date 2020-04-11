@@ -1,5 +1,6 @@
 using DddExample.Domain.Models;
-using DddExample.Test.Utility;
+using DddExample.Domain.Validation;
+using DddExample.Domain.Validation.Errors;
 using NUnit.Framework;
 
 namespace DddExample.Test.Domain
@@ -10,20 +11,18 @@ namespace DddExample.Test.Domain
         [TestCase(-1)]
         public void Ctor_InvalidAmount_ValidationError(decimal amount)
         {
-            ValidationResultAssert.FirstError(
-                nameof(Quantity.Amount),
-                "Needs to be greater than 0.",
-                () => new Quantity(amount, "C"));
+            var exception = Assert.Throws<ValidationException>(() => new Quantity(amount, "C"));
+
+            Assert.IsInstanceOf<RangeValidationError<decimal>>(exception.Errors[nameof(Quantity.Amount)][0]);
         }
 
         [TestCase("")]
         [TestCase(" ")]
         public void Ctor_MissingMeasurement_ValidationError(string measurement)
         {
-            ValidationResultAssert.FirstError(
-                nameof(Quantity.Measurement),
-                "Can't be empty.",
-                () => new Quantity(1, measurement));
+            var exception = Assert.Throws<ValidationException>(() => new Quantity(1, measurement));
+
+            Assert.IsInstanceOf<EmptyValidationError>(exception.Errors[nameof(Quantity.Measurement)][0]);
         }
     }
 }

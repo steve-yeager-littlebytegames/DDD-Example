@@ -1,4 +1,5 @@
 ﻿using DddExample.Domain.Validation;
+using DddExample.Domain.Validation.Errors;
 
 namespace DddExample.Domain.Models
 {
@@ -15,7 +16,7 @@ namespace DddExample.Domain.Models
                 ValidationResults.AddError(
                     ref validation,
                     nameof(Amount),
-                    new ValidationError("Needs to be greater than 0."));
+                    new RangeValidationError<decimal>(0, decimal.MaxValue));
             }
 
             if(string.IsNullOrWhiteSpace(measurement))
@@ -23,7 +24,7 @@ namespace DddExample.Domain.Models
                 ValidationResults.AddError(
                     ref validation,
                     nameof(Measurement),
-                    new ValidationError("Can't be empty."));
+                    new EmptyValidationError());
             }
 
             validation?.ThrowIfFailed();
