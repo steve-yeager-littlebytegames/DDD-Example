@@ -12,12 +12,18 @@ namespace DddExample.Domain.Models
             ValidationResults? validation = null;
             if(amount <= 0)
             {
-                ValidationResults.AddError(ref validation, nameof(Amount), "Needs to be greater than 0.");
+                ValidationResults.AddError(
+                    ref validation,
+                    nameof(Amount),
+                    new ValidationError("Needs to be greater than 0."));
             }
 
             if(string.IsNullOrWhiteSpace(measurement))
             {
-                ValidationResults.AddError(ref validation, nameof(Measurement), "Can't be empty.");
+                ValidationResults.AddError(
+                    ref validation,
+                    nameof(Measurement),
+                    new ValidationError("Can't be empty."));
             }
 
             validation?.ThrowIfFailed();

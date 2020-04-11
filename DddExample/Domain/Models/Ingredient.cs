@@ -12,7 +12,7 @@ namespace DddExample.Domain.Models
             ValidationResults? validation = null;
             if(string.IsNullOrWhiteSpace(name))
             {
-                ValidationResults.AddError(ref validation, nameof(Name), "Can't be empty.");
+                ValidationResults.AddError(ref validation, nameof(Name), new ValidationError("Can't be empty."));
             }
             validation?.ThrowIfFailed();
 

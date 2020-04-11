@@ -5,10 +5,10 @@ namespace DddExample.Test.Utility
 {
     public static class ValidationResultAssert
     {
-        public static void FirstMessage(string key, string message, TestDelegate code)
+        public static void FirstError(string key, string message, TestDelegate code)
         {
             var exception = Assert.Throws<ValidationException>(code);
-            Assert.AreEqual(message, exception.Errors[key][0]);
+            Assert.AreEqual(message, exception.Errors[key][0].Message);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace DddExample.Test.Domain
         [TestCase(" ")]
         public void Ctor_EmptyName_ValidationError(string name)
         {
-            ValidationResultAssert.FirstMessage(
+            ValidationResultAssert.FirstError(
                 nameof(Ingredient.Name),
                 "Can't be empty.",
                 () => new Ingredient(name, quantity));

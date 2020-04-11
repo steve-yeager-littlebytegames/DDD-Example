@@ -5,35 +5,35 @@ namespace DddExample.Domain.Validation
 {
     public class ValidationResults
     {
-        private readonly Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
+        private readonly Dictionary<string, List<ValidationError>> errors = new Dictionary<string, List<ValidationError>>();
 
-        public IReadOnlyDictionary<string, IReadOnlyList<string>> Errors => errors.ToDictionary(pair => pair.Key, pair => (IReadOnlyList<string>)pair.Value);
-        public bool HasError => errors.Count > 0;
+        private bool IsSuccess => errors.Count == 0;
 
-        public void AddError(string key, string message)
+        public static void AddError(ref ValidationResults? results, string key, ValidationError error)
+        {
+            results ??= new ValidationResults();
+            results.AddError(key, error);
+        }
+
+        private void AddError(string key, ValidationError error)
         {
             // TODO: validation
 
             if(!errors.TryGetValue(key, out var messages))
             {
-                errors[key] = messages = new List<string>();
+                errors[key] = messages = new List<ValidationError>();
             }
 
-            messages.Add(message);
+            messages.Add(error);
         }
 
         public void ThrowIfFailed()
         {
-            if(HasError)
+            if(!IsSuccess)
             {
-                throw new ValidationException(Errors);
+                var readonlyErrors = errors.ToDictionary(pair => pair.Key, pair => (IReadOnlyList<ValidationError>)pair.Value);
+                throw new ValidationException(readonlyErrors);
             }
-        }
-
-        public static void AddError(ref ValidationResults? results, string key, string message)
-        {
-            results ??= new ValidationResults();
-            results.AddError(key, message);
         }
     }
 }
