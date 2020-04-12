@@ -17,12 +17,10 @@ namespace DddExample.Domain.Validation.Services
             }
 
             var recipeResult = Recipe.Construct(
-                new Recipe.Validator(),
                 null,
                 request.Name,
                 variantID,
-                new []{Section.Construct("test", new Section.Validator()).Value!}
-            );
+                new[] {Section.Construct("test", new Section.Validator()).Value!});
 
             if(!recipeResult.IsValid)
             {

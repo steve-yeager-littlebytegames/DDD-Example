@@ -57,12 +57,13 @@ namespace DddExample.Domain.Models
             return new RecipeDto(ID.Value, Name, VariantID?.Value, CreatedDate);
         }
 
-        public static Result<Recipe> Construct(Validator validator, Guid? id, string name, Guid? variantID, IReadOnlyCollection<Section> sections)
+        public static Result<Recipe> Construct(Guid? id, string name, Guid? variantID, IReadOnlyCollection<Section> sections, Validator? validator = null)
         {
             var createdDate = DateTime.UtcNow;
             id ??= new Guid(new System.Guid());
             var recipe = new Recipe(id.Value, name, variantID, sections, createdDate);
 
+            validator ??= new Validator();
             var results = validator.Validate(recipe);
             return Result<Recipe>.Construct(recipe, results);
         }
