@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DddExample.Domain.General;
+using DddExample.Domain.Validation.Errors;
 
 namespace DddExample.Domain.Validation
 {
@@ -34,6 +36,21 @@ namespace DddExample.Domain.Validation
                 var readonlyErrors = errors.ToDictionary(pair => pair.Key, pair => (IReadOnlyList<ValidationError>)pair.Value);
                 throw new ValidationException(readonlyErrors);
             }
+        }
+
+        public static string Validate(string value, string name, Range range, ref ValidationResults? results)
+        {
+            value = value.Trim();
+
+            if(!range.IsValid(value.Length))
+            {
+                AddError(
+                    ref results,
+                    name,
+                    new LengthValidationError(range.Min, range.Max));
+            }
+
+            return value;
         }
     }
 }

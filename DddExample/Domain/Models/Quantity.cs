@@ -1,4 +1,5 @@
-﻿using DddExample.Domain.Validation;
+﻿using DddExample.Domain.General;
+using DddExample.Domain.Validation;
 using DddExample.Domain.Validation.Errors;
 
 namespace DddExample.Domain.Models
@@ -7,8 +8,7 @@ namespace DddExample.Domain.Models
     {
         private const decimal AmountMin = 0.1m;
         private const decimal AmountMax = 10m;
-        private const int MeasurementMin = 1;
-        private const int MeasurementMax = 10;
+        private static readonly Range measurementLength = new Range(1, 10);
 
         public decimal Amount { get; }
         public string Measurement { get; }
@@ -24,19 +24,10 @@ namespace DddExample.Domain.Models
                     new RangeValidationError<decimal>(AmountMin, AmountMax));
             }
 
-            measurement = measurement.Trim();
-            if(measurement.Length < MeasurementMin || measurement.Length > MeasurementMax)
-            {
-                ValidationResults.AddError(
-                    ref validation,
-                    nameof(Measurement),
-                    new LengthValidationError(MeasurementMin, MeasurementMax));
-            }
+            Amount = amount;
+            Measurement = ValidationResults.Validate(measurement, nameof(Measurement), measurementLength, ref validation);
 
             validation?.ThrowIfFailed();
-
-            Amount = amount;
-            Measurement = measurement;
         }
     }
 }
