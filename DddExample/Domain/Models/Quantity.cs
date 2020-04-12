@@ -1,33 +1,35 @@
-﻿using DddExample.Domain.General;
-using DddExample.Domain.Validation;
-using DddExample.Domain.Validation.Errors;
+﻿using DddExample.Domain.Validation;
+using FluentValidation;
 
 namespace DddExample.Domain.Models
 {
+    public class QuantityValidator : AbstractValidator<Quantity>
+    {
+        public QuantityValidator()
+        {
+            RuleFor(q => q.Amount).InclusiveBetween(0.1m, 10m);
+            RuleFor(q => q.Measurement).Length(1, 10);
+        }
+    }
+
     public class Quantity
     {
-        private const decimal AmountMin = 0.1m;
-        private const decimal AmountMax = 10m;
-        private static readonly Range measurementLength = new Range(1, 10);
-
         public decimal Amount { get; }
         public string Measurement { get; }
 
-        public Quantity(decimal amount, string measurement)
+        private Quantity(decimal amount, string measurement)
         {
-            ValidationResults? validation = null;
-            if(amount < AmountMin || amount > AmountMax)
-            {
-                ValidationResults.AddError(
-                    ref validation,
-                    nameof(Amount),
-                    new RangeValidationError<decimal>(AmountMin, AmountMax));
-            }
-
             Amount = amount;
-            Measurement = ValidationResults.Validate(measurement, nameof(Measurement), measurementLength, ref validation);
+            Measurement = measurement;
+        }
 
-            validation?.ThrowIfFailed();
+        public static Result<Quantity> Construct(decimal amount, string measurement, QuantityValidator validator)
+        {
+            measurement = measurement.Trim();
+            var quantity = new Quantity(amount, measurement);
+
+            var result = validator.Validate(quantity);
+            return Result<Quantity>.Construct(quantity, result);
         }
     }
 }

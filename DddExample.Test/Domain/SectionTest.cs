@@ -1,6 +1,4 @@
 ﻿using DddExample.Domain.Models;
-using DddExample.Domain.Validation;
-using DddExample.Domain.Validation.Errors;
 using NUnit.Framework;
 
 namespace DddExample.Test.Domain
@@ -8,14 +6,14 @@ namespace DddExample.Test.Domain
     [Ignore("not ready")]
     public class SectionTest
     {
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(" ")]
-        public void Ctor_NameInvalidLength_LengthError(string name)
-        {
-            var exception = Assert.Throws<ValidationException>(() => new Section(name));
+        //[TestCase("")]
+        //[TestCase(" ")]
+        //[TestCase(" ")]
+        //public void Ctor_NameInvalidLength_LengthError(string name)
+        //{
+        //    var exception = Assert.Throws<ValidationException>(() => new Section(name));
 
-            Assert.IsInstanceOf<LengthValidationError>(exception.Errors[nameof(Section.Name)][0]);
-        }
+        //    Assert.IsInstanceOf<LengthValidationError>(exception.Errors[nameof(Section.Name)][0]);
+        //}
     }
 }

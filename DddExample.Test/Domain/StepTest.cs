@@ -5,18 +5,18 @@ namespace DddExample.Test.Domain
 {
     public class StepTest
     {
-        [Test]
-        public void Ctor_NoIngredients_ReturnStep()
-        {
-            Assert.DoesNotThrow(() => new Step("test", null));
-        }
+        //[Test]
+        //public void Ctor_NoIngredients_ReturnStep()
+        //{
+        //    Assert.DoesNotThrow(() => new Step("test", null));
+        //}
 
-        [Test]
-        public void Ctor_HasIngredients_ReturnStep()
-        {
-            var ingredients = new[] {new Ingredient("Ab", new Quantity(1, "C"))};
-            Assert.DoesNotThrow(() => new Step("test", ingredients));
-        }
+        //[Test]
+        //public void Ctor_HasIngredients_ReturnStep()
+        //{
+        //    var ingredients = new[] {new Ingredient("Ab", new Quantity(1, "C"))};
+        //    Assert.DoesNotThrow(() => new Step("test", ingredients));
+        //}
 
         //[TestCase("")]
         //[TestCase(" ")]
