@@ -3,16 +3,16 @@ using FluentValidation;
 
 namespace DddExample.Domain.Models
 {
-    public class SectionValidator : AbstractValidator<Section>
-    {
-        public SectionValidator()
-        {
-            RuleFor(s => s.Name).Length(1, 50);
-        }
-    }
-
     public class Section
     {
+        public class Validator : AbstractValidator<Section>
+        {
+            public Validator()
+            {
+                RuleFor(s => s.Name).Length(1, 50);
+            }
+        }
+
         public string Name { get; }
 
         private Section(string name)
@@ -20,7 +20,7 @@ namespace DddExample.Domain.Models
             Name = name;
         }
 
-        public static Result<Section> Construct(string name, SectionValidator validator)
+        public static Result<Section> Construct(string name, Validator validator)
         {
             var section = new Section(name);
 

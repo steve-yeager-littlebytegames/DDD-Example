@@ -4,7 +4,7 @@ namespace DddExample.Test.Domain
 {
     public class IngredientTest
     {
-        private static readonly Quantity quantity = Quantity.Construct(1, "C", new QuantityValidator()).Value;
+        private static readonly Quantity quantity = Quantity.Construct(1, "C", new Quantity.Validator()).Value;
 
         //[TestCase("")]
         //[TestCase(" ")]

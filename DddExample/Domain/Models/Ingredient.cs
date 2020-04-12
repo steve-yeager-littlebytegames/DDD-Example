@@ -3,16 +3,16 @@ using FluentValidation;
 
 namespace DddExample.Domain.Models
 {
-    public class IngredientValidator : AbstractValidator<Ingredient>
-    {
-        public IngredientValidator()
-        {
-            RuleFor(i => i.Name).Length(1, 30);
-        }
-    }
-
     public class Ingredient
     {
+        public class Validator : AbstractValidator<Ingredient>
+        {
+            public Validator()
+            {
+                RuleFor(i => i.Name).Length(1, 30);
+            }
+        }
+
         public string Name { get; }
         public Quantity Quantity { get; }
 
@@ -22,7 +22,7 @@ namespace DddExample.Domain.Models
             Quantity = quantity;
         }
 
-        public static Result<Ingredient> Construct(string name, Quantity quantity, IngredientValidator validator)
+        public static Result<Ingredient> Construct(string name, Quantity quantity, Validator validator)
         {
             name = name.Trim();
             var ingredient = new Ingredient(name, quantity);

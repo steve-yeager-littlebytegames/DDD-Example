@@ -4,16 +4,16 @@ using FluentValidation;
 
 namespace DddExample.Domain.Models
 {
-    public class StepValidator : AbstractValidator<Step>
-    {
-        public StepValidator()
-        {
-            RuleFor(s => s.Instruction).Length(1, 100);
-        }
-    }
-
     public class Step
     {
+        public class Validator : AbstractValidator<Step>
+        {
+            public Validator()
+            {
+                RuleFor(s => s.Instruction).Length(1, 100);
+            }
+        }
+
         public string Instruction { get; }
         public IReadOnlyCollection<Ingredient>? Ingredients { get; }
 
@@ -23,7 +23,7 @@ namespace DddExample.Domain.Models
             Ingredients = ingredients;
         }
 
-        public static Result<Step> Construct(string instruction, IReadOnlyCollection<Ingredient>? ingredients, StepValidator validator)
+        public static Result<Step> Construct(string instruction, IReadOnlyCollection<Ingredient>? ingredients, Validator validator)
         {
             var step = new Step(instruction, ingredients);
 

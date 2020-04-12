@@ -3,17 +3,17 @@ using FluentValidation;
 
 namespace DddExample.Domain.Models
 {
-    public class QuantityValidator : AbstractValidator<Quantity>
-    {
-        public QuantityValidator()
-        {
-            RuleFor(q => q.Amount).InclusiveBetween(0.1m, 10m);
-            RuleFor(q => q.Measurement).Length(1, 10);
-        }
-    }
-
     public class Quantity
     {
+        public class Validator : AbstractValidator<Quantity>
+        {
+            public Validator()
+            {
+                RuleFor(q => q.Amount).InclusiveBetween(0.1m, 10m);
+                RuleFor(q => q.Measurement).Length(1, 10);
+            }
+        }
+
         public decimal Amount { get; }
         public string Measurement { get; }
 
@@ -23,7 +23,7 @@ namespace DddExample.Domain.Models
             Measurement = measurement;
         }
 
-        public static Result<Quantity> Construct(decimal amount, string measurement, QuantityValidator validator)
+        public static Result<Quantity> Construct(decimal amount, string measurement, Validator validator)
         {
             measurement = measurement.Trim();
             var quantity = new Quantity(amount, measurement);
