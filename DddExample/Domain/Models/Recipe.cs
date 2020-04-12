@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using DddExample.Domain.Validation;
+using DddExample.Domain.Validation.DTOs;
 using FluentValidation;
 using FluentValidation.Validators;
 
 namespace DddExample.Domain.Models
 {
-    public class Recipe
+    internal class Recipe
     {
         public class Validator : AbstractValidator<Recipe>
         {
@@ -51,10 +52,16 @@ namespace DddExample.Domain.Models
             CreatedDate = createdDate;
         }
 
-        public static Result<Recipe> Construct(Guid id, string name, Guid? variantID, IReadOnlyCollection<Section> sections, Validator validator)
+        public RecipeDto ToDto()
+        {
+            return new RecipeDto(ID.Value, Name, VariantID?.Value, CreatedDate);
+        }
+
+        public static Result<Recipe> Construct(Validator validator, Guid? id, string name, Guid? variantID, IReadOnlyCollection<Section> sections)
         {
             var createdDate = DateTime.UtcNow;
-            var recipe = new Recipe(id, name, variantID, sections, createdDate);
+            id ??= new Guid(new System.Guid());
+            var recipe = new Recipe(id.Value, name, variantID, sections, createdDate);
 
             var results = validator.Validate(recipe);
             return Result<Recipe>.Construct(recipe, results);
